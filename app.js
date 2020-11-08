@@ -1,8 +1,9 @@
 const express = require("express");
-
 const app = express();
 const { sequelize } = require("./models");
 const routes = require("./routes");
+
+require("dotenv").config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,6 +19,7 @@ sequelize
     console.error(err);
   });
 
+app.set("jwt-secret", process.env.JWT_SECRET);
 app.use("/", routes);
 
 app.listen(PORT, () => {
