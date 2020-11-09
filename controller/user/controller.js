@@ -1,0 +1,91 @@
+const { User } = require("../../models");
+const jwt = require("jsonwebtoken");
+
+const signup = async (req, res) => {
+  // const userId = req.body.userId;
+  // const password = req.body.password;
+  // const nickname = req.body.nickname;
+
+  const { userId, password, nickname } = req.body;
+  try {
+    const user = await User.findOne({
+      where: {
+        nickname,
+      },
+    });
+    if (user) {
+      res.status(410).json({
+        message: "닉네임 중복",
+      });
+    }
+    await User.create({
+      userId,
+      password,
+      nickname,
+    });
+    res.status(200).json({
+      message: "성공",
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(409).json({
+      message: "아이디 중복",
+    });
+  }
+};
+
+const login = async (req, res) => {
+  const { userId, password } = req.body;
+  const secret = req.app.get("jwt-secret");
+  try {
+    const user = await User.findOne({
+      where: { userId },
+    });
+    if (user.password !== password) {
+      throw new Error();
+    }
+    const token = jwt.sign(
+      {
+        userId,
+      },
+      secret,
+      {
+        expiresIn: "24h",
+      }
+    );
+    res.status(200).json({
+      message: "성공",
+      accessToken: token,
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(404).json({
+      message: "틀린 비밀번호",
+    });
+  }
+};
+const info = async (req, res) => {
+  const { character } = req.body;
+  const userId = req.decoded.userId;
+  try {
+    await User.update(
+      {
+        character,
+      },
+      { where: { userId } }
+    );
+    res.status(200).json({
+      message: "성공",
+    });
+  } catch (err) {
+    res.status(404).json({
+      message: "userId가 없음",
+    });
+  }
+};
+
+module.exports = {
+  signup,
+  login,
+  info,
+};
