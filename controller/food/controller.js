@@ -1,10 +1,8 @@
 const { User, Food } = require("../../models");
-const jwt = require("jsonwebtoken");
 
 const food = async (req, res) => {
   const { foodid, foodmoney } = req.body;
   const token = req.decoded.userId;
-  //const secret = req.app.get("jwt-secret");
   try {
     const user = await User.findOne({
       where: { userId: token },
@@ -18,12 +16,14 @@ const food = async (req, res) => {
         userId: token,
       });
     }
+    await user.increment({ money: foodmoney * -1 });
     res.status(200).json({
       message: "결제 완료",
     });
   } catch (err) {
+    console.log(err.message);
     res.status(409).json({
-      message: "잔액이 부족합니다.",
+      message: "잔액이 부족합니다",
     });
   }
 };

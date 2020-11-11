@@ -1,4 +1,4 @@
-const { User, Food, Lotto, Game } = require("../../models");
+const { User, Ball, Mole, Word } = require("../../models");
 const jwt = require("jsonwebtoken");
 
 const game = async (req, res) => {
@@ -17,7 +17,7 @@ const game = async (req, res) => {
 
   try {
     if (id == 1) {
-      const ballscore = ball.findOne({
+      const ballscore = Ball.findOne({
         where: { userId: score },
       });
       if (score) {
@@ -30,13 +30,13 @@ const game = async (req, res) => {
           }
         );
       } else {
-        await ballscore.create({
+        await Ball.create({
           score,
         });
       }
     }
     if (id == 2) {
-      const wordscore = word.findOne({
+      const wordscore = Word.findOne({
         where: { userId: score },
       });
       if (score) {
@@ -49,13 +49,13 @@ const game = async (req, res) => {
           }
         );
       } else {
-        await wordscore.create({
+        await Word.create({
           score,
         });
       }
     }
     if (id == 3) {
-      const molescore = mole.findOne({
+      const molescore = Mole.findOne({
         where: { userId: score },
       });
       if (score) {
@@ -68,7 +68,7 @@ const game = async (req, res) => {
           }
         );
       } else {
-        await molescore.create({
+        await Mole.create({
           score,
         });
       }
@@ -83,6 +83,37 @@ const game = async (req, res) => {
   }
 };
 
+const rank = async (req, res) => {
+  const id = req.params.id;
+  try {
+    if (id === 1) {
+      const gameRank = await Ball.findAll({
+        attributes: ["userId"],
+        limit: 3,
+        orderby: ["score"],
+      });
+    }
+    if (id === 2) {
+      const gameRank = await Word.findAll({
+        attributes: ["userId"],
+        limit: 3,
+        orderby: ["score"],
+      });
+    }
+    if (id === 3) {
+      const gameRank = await Mole.findAll({
+        attributes: ["userId"],
+        limit: 3,
+        orderby: ["score"],
+      });
+    }
+    res.status(200).json(gameRank);
+  } catch (err) {
+    res.status(404).json({ message: "잘못된 게임" });
+  }
+};
+
 module.exports = {
   game,
+  rank,
 };

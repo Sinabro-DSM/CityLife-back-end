@@ -20,16 +20,16 @@ db.Ball = require("./ball")(sequelize, Sequelize);
 db.Word = require("./word")(sequelize, Sequelize);
 db.Mole = require("./mole")(sequelize, Sequelize);
 
-db.User.hasMany(db.Food);
-db.Food.belongsTo(db.User);
+db.User.hasMany(db.Food, { foreignKey: "userId", targetKey: "userId" });
+db.Food.belongsTo(db.User, { foreignKey: "userId" });
 
-db.User.hasOne(db.Ball);
-db.Ball.belongsTo(db.User);
+db.User.hasOne(db.Ball, { foreignKey: "userId", targetKey: "userId" });
+db.Ball.belongsTo(db.User, { foreignKey: "userId" });
 
-db.User.hasOne(db.Mole);
-db.Mole.belongsTo(db.User);
+db.User.hasOne(db.Mole, { foreignKey: "userId", targetKey: "userId" });
+db.Mole.belongsTo(db.User, { foreignKey: "userId" });
 
-db.User.hasOne(db.Word);
-db.Word.belongsTo(db.User);
+db.User.hasOne(db.Word, { foreignKey: "userId", targetKey: "userId" });
+db.Word.belongsTo(db.User, { foreignKey: "userId" });
 
 module.exports = db;

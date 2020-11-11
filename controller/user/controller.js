@@ -1,4 +1,4 @@
-const { User } = require("../../models");
+const { User, Food, sequelize } = require("../../models");
 const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
@@ -84,8 +84,25 @@ const info = async (req, res) => {
   }
 };
 
+const myPage = async (req, res) => {
+  const userId = req.decoded.userId;
+  console.log(userId);
+  try {
+    const foods = await Food.findAll({
+      where: { userId },
+      attributes: ["food", [sequelize.fn("count", "*"), "count"]],
+      group: "food",
+    });
+    res.status(200).json(foods);
+  } catch (err) {
+    console.log(err.message);
+    res.status(404).json({ message: "유저가 없음" });
+  }
+};
+
 module.exports = {
   signup,
   login,
   info,
+  myPage,
 };
