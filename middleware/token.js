@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 
 const tokenMiddleware = async (req, res, next) => {
-  console.log(req.headers);
   const token = req.headers["access-token"];
   if (!token) {
     res.status(403).json({ message: "로그인 되어있지 않음" });
