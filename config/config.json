@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "fthbvg1234@",
-    "database": "nodejs",
-    "host": "127.0.0.1",
+    "username": "cl1",
+    "password": "citylife",
+    "database": "city_life",
+    "host": "cl.cndu0idhxkrh.ap-northeast-2.rds.amazonaws.com",
     "dialect": "mysql"
   },
   "test": {
