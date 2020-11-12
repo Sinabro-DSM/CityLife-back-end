@@ -2,33 +2,20 @@ const { User, Ball, Mole, Word } = require("../../models");
 const jwt = require("jsonwebtoken");
 
 const game = async (req, res) => {
-  const { game } = req.body;
-  const token = req.decoded.uesrId;
-  //const secret = req.app.get("jwt-secret");
+  const { score, id } = req.body;
+  const token = req.decoded.userId;
   const user = await User.findOne({
     where: { userId: token },
   });
-  await User.increment(
-    { money: 300 },
-    {
-      where: { userId: token },
-    }
-  );
-
   try {
+    await user.increment({ money: 300 });
     if (id == 1) {
-      const ballscore = Ball.findOne({
-        where: { userId: score },
+      const ballscore = await Ball.findOne({
+        where: { userId: token },
       });
-      if (score) {
-        await ballscore.update(
-          {
-            blalscore: game,
-          },
-          {
-            where: { userId: token },
-          }
-        );
+      if (ballscore) {
+        ballscore.score = score;
+        await ballscore.save();
       } else {
         await Ball.create({
           score,
@@ -36,47 +23,37 @@ const game = async (req, res) => {
       }
     }
     if (id == 2) {
-      const wordscore = Word.findOne({
-        where: { userId: score },
+      const wordscore = await Word.findOne({
+        where: { userId: token },
       });
-      if (score) {
-        await wordscore.update(
-          {
-            score: game,
-          },
-          {
-            where: { userId: token },
-          }
-        );
+      if (wordscore) {
+        wordscore.score = score;
+        await wordscore.save();
       } else {
         await Word.create({
           score,
+          userId: token,
         });
       }
     }
     if (id == 3) {
-      const molescore = Mole.findOne({
-        where: { userId: score },
+      const molescore = await Mole.findOne({
+        where: { userId: token },
       });
-      if (score) {
-        await molescore.update(
-          {
-            score: game,
-          },
-          {
-            where: { userId: token },
-          }
-        );
+      if (molescore) {
+        molescore.score = score;
+        await molescore.save();
       } else {
         await Mole.create({
           score,
         });
       }
-      res.status(200).json({
-        message: "성공",
-      });
     }
+    res.status(200).json({
+      message: "성공",
+    });
   } catch (err) {
+    console.log(err.message);
     res.status(404).json({
       message: "유저를 찾을 수 없습니다.",
     });
@@ -85,23 +62,24 @@ const game = async (req, res) => {
 
 const rank = async (req, res) => {
   const id = req.params.id;
+  let gameRank;
   try {
     if (id === 1) {
-      const gameRank = await Ball.findAll({
+      gameRank = await Ball.findAll({
         attributes: ["userId"],
         limit: 3,
         orderby: ["score"],
       });
     }
     if (id === 2) {
-      const gameRank = await Word.findAll({
+      gameRank = await Word.findAll({
         attributes: ["userId"],
         limit: 3,
         orderby: ["score"],
       });
     }
     if (id === 3) {
-      const gameRank = await Mole.findAll({
+      gameRank = await Mole.findAll({
         attributes: ["userId"],
         limit: 3,
         orderby: ["score"],
