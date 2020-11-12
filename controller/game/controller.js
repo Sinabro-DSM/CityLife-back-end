@@ -64,29 +64,30 @@ const rank = async (req, res) => {
   const id = req.params.id;
   let gameRank;
   try {
-    if (id === 1) {
+    if (id == 1) {
       gameRank = await Ball.findAll({
+        order: [["score", "DESC"]],
         attributes: ["userId"],
         limit: 3,
-        orderby: ["score"],
       });
     }
-    if (id === 2) {
+    if (id == 2) {
       gameRank = await Word.findAll({
+        order: [["score", "DESC"]],
         attributes: ["userId"],
         limit: 3,
-        orderby: ["score"],
       });
     }
-    if (id === 3) {
+    if (id == 3) {
       gameRank = await Mole.findAll({
+        order: [["score", "DESC"]],
         attributes: ["userId"],
         limit: 3,
-        orderby: ["score"],
       });
     }
     res.status(200).json(gameRank);
   } catch (err) {
+    console.log(err.message);
     res.status(404).json({ message: "잘못된 게임" });
   }
 };
