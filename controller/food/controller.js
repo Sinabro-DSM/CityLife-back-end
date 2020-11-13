@@ -42,7 +42,7 @@ const eatFood = async (req, res) => {
   const token = req.decoded.userId;
   const id = req.params.id;
   try {
-    const food = await food.findOne({
+    const food = await Food.findOne({
       where: { userId: token, food: id },
     });
     if (!food) throw new Error();
@@ -66,6 +66,7 @@ const eatFood = async (req, res) => {
       message: "먹기 성공",
     });
   } catch (err) {
+    console.log(err.message);
     res.status(404).json({
       message: "음식이 없음",
     });
