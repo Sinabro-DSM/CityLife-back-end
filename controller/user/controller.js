@@ -38,7 +38,7 @@ const login = async (req, res) => {
       },
       secret,
       {
-        expiresIn: "24h",
+        expiresIn: "10000000h",
       }
     );
     res.status(200).json({
@@ -74,7 +74,6 @@ const info = async (req, res) => {
 
 const myPage = async (req, res) => {
   const userId = req.decoded.userId;
-  console.log(userId);
   try {
     const foods = await Food.findAll({
       where: { userId },

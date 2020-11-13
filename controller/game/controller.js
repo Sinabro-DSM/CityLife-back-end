@@ -19,6 +19,7 @@ const game = async (req, res) => {
       } else {
         await Ball.create({
           score,
+          userId: token,
         });
       }
     }
@@ -46,6 +47,7 @@ const game = async (req, res) => {
       } else {
         await Mole.create({
           score,
+          userId: token,
         });
       }
     }

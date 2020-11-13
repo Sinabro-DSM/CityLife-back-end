@@ -1,5 +1,15 @@
 const { User, Food } = require("../../models");
 
+const showMoney = async (req, res) => {
+  const userId = req.decoded.userId;
+  try {
+    const user = await User.findOne({ where: { userId } });
+    res.status(200).json({ money: user.money });
+  } catch (err) {
+    res.status(404).json({ message: "유저를 찾을수 없음" });
+  }
+};
+
 const food = async (req, res) => {
   const { foodid, foodmoney } = req.body;
   const token = req.decoded.userId;
@@ -27,7 +37,7 @@ const food = async (req, res) => {
     });
   }
 };
-// 프론트 애들한테 샐러드랑 거시기 5,6 번으로 맞춰달라고 하기
+
 const eatFood = async (req, res) => {
   const token = req.decoded.userId;
   const id = req.params.id;
@@ -63,6 +73,7 @@ const eatFood = async (req, res) => {
 };
 
 module.exports = {
+  showMoney,
   food,
   eatFood,
 };
