@@ -6,5 +6,6 @@ router.post("/signup", controller.signup);
 router.post("/login", controller.login);
 router.post("/info", middleware, controller.info);
 router.get("/", middleware, controller.myPage);
+router.get("/character", middleware, controller.getCharacter);
 
 module.exports = router;

@@ -90,9 +90,23 @@ const myPage = async (req, res) => {
   }
 };
 
+const getCharacter = async (req, res) => {
+  const userId = req.decoded.userId;
+  try {
+    const user = await User.findOne({
+      where: { userId },
+      attributes: ["character", "weight"],
+    });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(404).json({ message: "유저를 찾을 수 없음" });
+  }
+};
+
 module.exports = {
   signup,
   login,
   info,
   myPage,
+  getCharacter,
 };
