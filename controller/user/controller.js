@@ -77,7 +77,7 @@ const myPage = async (req, res) => {
   try {
     const user = await User.findOne({
       where: { userId },
-      attributes: ["userId", "character", "money"],
+      attributes: ["userId", "character", "money", "weight"],
     });
     const foods = await Food.findAll({
       where: { userId },
@@ -86,7 +86,6 @@ const myPage = async (req, res) => {
     });
     res.status(200).json({ user, foods });
   } catch (err) {
-    console.log(err.message);
     res.status(404).json({ message: "유저가 없음" });
   }
 };
