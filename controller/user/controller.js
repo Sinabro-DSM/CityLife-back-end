@@ -77,7 +77,7 @@ const myPage = async (req, res) => {
   try {
     const user = await User.findOne({
       where: { userId },
-      attributes: ["character", "money"],
+      attributes: ["id", "character", "money"],
     });
     const foods = await Food.findAll({
       where: { userId },
