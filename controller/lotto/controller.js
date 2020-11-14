@@ -1,7 +1,7 @@
 const { User } = require("../../models");
 
 const lotto = async (req, res) => {
-  const { lotto } = req.body;
+  const { money } = req.body;
   const token = req.decoded.userId;
   try {
     const user = await User.findOne({
@@ -10,7 +10,7 @@ const lotto = async (req, res) => {
     if (user.money < 300) {
       throw new Error();
     }
-    await user.increment({ money: lotto - 300 });
+    await user.increment({ money: money - 300 });
     res.status(200).json({
       message: "성공",
     });
