@@ -7,3 +7,4 @@ router.post("/login", controller.login);
 router.post("/info", middleware, controller.info);
 
 module.exports = router;
+
